@@ -1,17 +1,71 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %} Home {% endblock %}
+{% block title %}
+  Home
+{% endblock %}
+
+{% block navbar %}
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' student.username %}">
+        <img src="{% static 'images/school-portal-blue.svg' %}" alt="School Project Brand" width="60" height="60" class="d-inline-block align-text-top" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_login' %}">Sign out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endblock %}
+
 {% block body %}
-<div class="row">
-    <div class="col-6">
-        <h1>Student Name</h1>
+  <div class="row mt-5">
+    <div class="col-auto">
+      <h2>Welcome {{ student.full_name }}</h2>
     </div>
-    <div class="col-3">
-        <h2>Term</h1>
+    <div class="col-auto ms-auto">
+      <div class="btn-group" role="group" aria-label="Class and age">
+        <button type="button" class="btn btn-outline-secondary">{{ student.get_class_name_display }}</button>
+        <button type="button" class="btn btn-outline-secondary">{{ student.age }} years</button>
+      </div>
     </div>
-    <div class="col-3">
-        <h2>Class</h1>
-    </div>
-</div>
-<!-- The table goes here -->
+  </div>
+  <div class="row mt-3">
+    <nav class="nav nav-tabs flex-column flex-sm-row">
+      <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="#"><strong>Report</strong></a>
+      <a class="flex-sm-fill text-sm-center nav-link" href="#">Details</a>
+    </nav>
+  </div>
+  <div class="row mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          {% for header in scores_header %}
+            <th scope="col">{{ header }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in scores_data %}
+          <tr>
+            {% for column in row %}
+              {% if forloop.first %}
+                <th scope="row">{{ column }}</th>
+              {% else %}
+                <td>{{ column|default:'-' }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
