@@ -1,3 +1,4 @@
+from pprint import pprint
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from . import models
@@ -37,13 +38,14 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             # process the data here
-            student = form.save()
+            student = form.save(commit=False)
             username = student.username
             if models.Student.objects.filter(username=username):
                 errors = ["A user with those names already exists"]
                 form = SignUpForm(initial={'class_name': 'S1'})
                 return render(request, "signup.html", {"form": form, "errors": errors})
 
+            form.save()
             return redirect('home', username=username)
     else:
         form = SignUpForm(initial={'class_name': 'S1'})
@@ -57,7 +59,8 @@ def home(request, username):
     student = models.Student.objects.filter(username=username).first()
     if not student:
         return redirect('user_login')
-    print(student.compile_scores())
+    pprint(student.compile_scores())
+    pprint(compile_score_table(student.compile_scores()))
     scores_header, scores_data = compile_score_table(student.compile_scores())
     context = {
         "student": student,

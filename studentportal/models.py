@@ -28,7 +28,7 @@ class Student(models.Model):
             temp_dict = {}
             temp_total = 0
             subject_count = 0
-            for subject in self.subject_set.all():
+            for subject in self.subject_set.all(): # self.subject_set.all() returns all subjects that are related to this username
                 if subject.type != exam_code:
                     continue
                 if subject.name in REPORT_COLUMNS:
@@ -69,7 +69,7 @@ class Subject(models.Model):
     name = models.CharField(max_length=10, choices=SUBJECT_CHOICES)
     score = models.PositiveBigIntegerField()
     type = models.CharField(max_length=10, choices=SUBJECT_TYPE_CHOICES)
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE) # Many-to-one relationships
 
     def __str__(self):
         return f"{self.student_id.id}-{self.name}-{self.score}".replace(" ", "-")
