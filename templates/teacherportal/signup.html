@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+  Sign Up
+{% endblock %}
+{% block body %}
+  <div class="container px-5">
+    <div class="row justify-content-center">
+      <div class="col-auto">
+        <img src="{% static 'images/school-portal-blue.png' %}" alt="School Portal Banner" class="rounded my-4" style="width: 250px;" />
+      </div>
+    </div>
+    <form class="row g-3 justify-content-center mb-3" id="user-type" method="post">
+      {% csrf_token %}
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="user" id="btnradio1" data-value="student" autocomplete="off" {% if user_type == "student" %}checked{% endif %}/>
+        <label class="btn btn-outline-primary w-100" for="btnradio1">Student</label>
+
+        <input type="radio" class="btn-check" name="user" id="btnradio2" data-value="parent" autocomplete="off" {% if user_type == "parent" %}checked{% endif %}/>
+        <label class="btn btn-outline-primary w-100" for="btnradio2">Parent</label>
+
+        <input type="radio" class="btn-check" name="user" id="btnradio3" data-value="teacher" autocomplete="off" {% if user_type == "teacher" %}checked{% endif %}/>
+        <label class="btn btn-outline-primary w-100" for="btnradio3">Teacher</label>
+
+        <input type="radio" class="btn-check" name="user" id="btnradio4" data-value="administrator" autocomplete="off" {% if user_type == "administrator" %}checked{% endif %}/>
+        <label class="btn btn-outline-primary w-100" for="btnradio4">Administrator</label>
+      </div>
+    </form>
+    {% if errors %}
+      <div class="alert alert-danger" role="alert">
+      {% for error in errors %}
+        <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+      </div>
+    {% endif %}
+    <form class="row g-3" method="post">
+      {% csrf_token %}
+      <div class="col-12">
+        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+        {% render_field form.email|add_class:'form-control' %}
+        {{ form.email.errors }}
+      </div>
+      <div class="col-md-6">
+        <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+        {% render_field form.first_name|add_class:'form-control' %}
+        {{ form.first_name.errors }}
+      </div>
+      <div class="col-md-6">
+        <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+        {% render_field form.last_name|add_class:'form-control' %}
+        {{ form.last_name.errors }}
+      </div>
+      <div class="col-12">
+        <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}</label>
+        {% render_field form.password|add_class:'form-control' %}
+        {{ form.password.errors }}
+      </div>
+      <div class="col-4">
+        <label for="{{ form.age.id_for_label }}" class="form-label">{{ form.age.label }}</label>
+        {% render_field form.age|add_class:'form-control' %}
+        {{ form.age.errors }}
+      </div>
+      <div class="col-4">
+        <label for="{{ form.subject_name.id_for_label }}" class="form-label">{{ form.subject_name.label }}</label>
+        {% render_field form.subject_name|add_class:'form-control' %}
+        {{ form.subject_name.errors }}
+      </div>
+      <div class="col-4">
+        <label for="{{ form.class_name.id_for_label }}" class="form-label">{{ form.class_name.label }}</label>
+        {% render_field form.class_name|add_class:'form-control' %}
+        {{ form.class_name.errors }}
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+        <a href="{% url 'portal-signup' user_type='student' %}">Already have an account? Log in</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
